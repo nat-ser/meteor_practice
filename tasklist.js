@@ -19,7 +19,7 @@ Template.tasks.events({
     return false;
   },
   "dblclick .edit-task": function(event){
-    // Template.
+    Template.edit.
       Meteor.call('editTask', this._id);
     return false;
   },
