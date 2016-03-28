@@ -9,6 +9,13 @@ if (Meteor.isClient) {
     }
   });
 
+Template.profilePage.helpers({
+email: function () {
+  return Meteor.user().emails[0].address;
+}
+});
+
+
 Template.tasks.events({
   "submit .add-task": function(event){
     var name =event.target.name.value;
@@ -18,10 +25,16 @@ Template.tasks.events({
 
     return false;
   },
-  "dblclick .edit-task": function(event){
-    Template.edit.
-      Meteor.call('editTask', this._id);
+  "submit .edit-task": function(event){
+    var name =event.target.name.value;
+  Meteor.call('changeTask', name);
     return false;
+  },
+  "dblclick .edit-task": function(event, target){
+    console.log('gdgbds');
+    return Session.set("target" + this._id, true);
+    // Meteor.call('editTask', this._id);
+    // return false;
   },
   "click .delete-task": function(event){
     if (confirm('delete task?')){
@@ -51,14 +64,23 @@ Meteor.methods ({
     });
 
   },
-  editTask: function(taskId, name){
-    Tasks.remove(taskId);
-    Tasks.insert({
-      name:name,
-      createdAt: new Date(),
-      userId: Meteor.userId()
-    });
+  editTask: function(taskId){
+    console.log("here");
+
+    //    function(taskId, name){
+    // console.log("got here");
+  // Tasks.update(taskId, {
+  //     $set: {name: input[name]}
+  //   });
   },
+  changeTask: function(event, target){
+         Tasks.update(this._id, {
+           $set: {task: event.currentTarget.value}
+         });
+          return Session.set("target" + target.data._id, false);
+       },
+
+
   deleteTask: function(taskId){
     Tasks.remove(taskId);
   }

@@ -3,33 +3,39 @@
 </head>
 
 <body>
-
   {{> tasks}}
 </body>
 
 <template name="tasks">
   {{> loginButtons}}
   <h1>Add task</h1>
-
     <form class='add-task'>
       <label>Task Name</label>
       <input type="text" name="name" placeholder="Add task" />
-      <input type='submit' value='submit' />
     </form>
 
-  {{#if currentUser}}
+{{#if currentUser}}
+  {{> profilePage}}
   <h3>tasks</h3>
+    {{#each tasks}}
+      <ul>
+        {{#if isEditing}}
+          <form class='edit-task'>
+            <input type="text" name="name" placeholder="Edit task" />
+          </form>
+        {{else}}
+          <li class='edit-task'>{{name}} <a href="#" class="delete-task">X</a></li>
+        {{/if}}
+          </ul>
+    {{/each}}
 
-  <ul>
-  {{#each tasks}}
-  <li class='edit-task'>{{name}} <a href="#" class="delete-task">X</a></li>
+  {{else}}
 
-  {{/each}}
-
-</ul>
-{{else}}
-<p>Please log in to add tasks</p>
+    <p>Please log in to add tasks</p>
   {{/if}}
-  <!-- <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p> -->
+</template>
+
+
+<template name="profilePage">
+  <p>HI {{email}}!</p>
 </template>
